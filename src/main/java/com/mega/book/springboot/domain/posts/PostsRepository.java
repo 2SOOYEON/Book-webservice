@@ -1,4 +1,4 @@
-package com.mega.book.springboot.service.domain.posts;
+package com.mega.book.springboot.domain.posts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

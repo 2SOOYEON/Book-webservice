@@ -1,8 +1,8 @@
 package com.mega.book.springboot.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mega.book.springboot.service.domain.posts.Posts;
-import com.mega.book.springboot.service.domain.posts.PostsRepository;
+import com.mega.book.springboot.domain.posts.Posts;
+import com.mega.book.springboot.domain.posts.PostsRepository;
 import com.mega.book.springboot.web.dto.PostsSaveRequestDto;
 import com.mega.book.springboot.web.dto.PostsUpdateRequestDto;
 import org.junit.After;
@@ -17,7 +17,6 @@ import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -32,22 +31,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PostsApiControllerTest{
-
     @LocalServerPort
     private int port;
-
     @Autowired
     private TestRestTemplate restTemplate;
-
     @Autowired
     private PostsRepository postsRepository;
 
-    private MockMvc mvc;
-
     @Autowired
     private WebApplicationContext context;
-
-    @Before
+    private MockMvc mvc;
+    @Before // MockMvc를 인스턴스를 생성
     public void setup(){
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
@@ -59,10 +53,9 @@ public class PostsApiControllerTest{
     public void tearDown() throws Exception{
         postsRepository.deleteAll();
     }
-
     @Test
-    @WithMockUser(roles="USER")
-    public <PostSaveRequestDto> void Posts_등록된다() throws Exception{
+    @WithMockUser(roles = "USER")
+    public void Posts_등록된다() throws Exception{
         String title = "title";
         String content = "content";
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
@@ -70,11 +63,12 @@ public class PostsApiControllerTest{
                 .content(content)
                 .author("author")
                 .build();
-        String url = "http://localhost:"+port+"/api/v1/posts";
+
+        String url = "http://localhost:" + port + "/api/v1/posts";
 
         mvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(requestDto)))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(status().isOk());
 
 //        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
@@ -86,16 +80,16 @@ public class PostsApiControllerTest{
         assertThat(all.get(0).getTitle()).isEqualTo(title);
         assertThat(all.get(0).getContent()).isEqualTo(content);
     }
-
     @Test
-    @WithMockUser(roles="USER")
+    @WithMockUser(roles = "USER")
     public void Posts_수정된다() throws Exception{
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .title("title")
                 .content("content")
-                .author("author").build());
+                .author("author")
+                .build());
 
-        Long updateId = savedPosts.getId();;
+        Long updateId = savedPosts.getId();
         String expectedTitle = "title2";
         String expectedContent = "content2";
 
@@ -104,23 +98,23 @@ public class PostsApiControllerTest{
                 .content(expectedContent)
                 .build();
 
-        String url = "http://localhost:"+port+"/api/v1/posts/"+updateId;
+        String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
 
         mvc.perform(put(url)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(requestDto)))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(status().isOk());
+
 
 //        HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
 
 //        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT,
-//                requestEntity, Long.class);
+//                requestEntity,Long.class);
 //
 //        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 //        assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
         List<Posts> all = postsRepository.findAll();
-
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
     }

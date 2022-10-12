@@ -1,6 +1,6 @@
 package com.mega.book.springboot.web.dto;
 
-import com.mega.book.springboot.service.domain.posts.Posts;
+import com.mega.book.springboot.domain.posts.Posts;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,7 @@
 package com.mega.book.springboot.service.posts;
 
-import com.mega.book.springboot.service.domain.posts.Posts;
-import com.mega.book.springboot.service.domain.posts.PostsRepository;
+import com.mega.book.springboot.domain.posts.Posts;
+import com.mega.book.springboot.domain.posts.PostsRepository;
 import com.mega.book.springboot.web.dto.PostsListResponseDto;
 import com.mega.book.springboot.web.dto.PostsResponseDto;
 import com.mega.book.springboot.web.dto.PostsSaveRequestDto;

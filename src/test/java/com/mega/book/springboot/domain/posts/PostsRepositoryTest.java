@@ -1,7 +1,7 @@
 package com.mega.book.springboot.domain.posts;
 
-import com.mega.book.springboot.service.domain.posts.Posts;
-import com.mega.book.springboot.service.domain.posts.PostsRepository;
+import com.mega.book.springboot.domain.posts.Posts;
+import com.mega.book.springboot.domain.posts.PostsRepository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

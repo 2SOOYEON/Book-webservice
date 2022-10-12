@@ -1,6 +1,6 @@
-package com.mega.book.springboot.service.domain.posts;
+package com.mega.book.springboot.domain.posts;
 
-import com.mega.book.springboot.service.domain.BaseTimeEntity;
+import com.mega.book.springboot.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
